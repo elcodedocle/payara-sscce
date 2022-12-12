@@ -72,7 +72,7 @@ class DeploymentIT {
     private String parseInputStream(InputStream inputStream, final String contains) throws IOException {
         var stdOut = "";
         try (var br = new BufferedReader(new InputStreamReader(inputStream))) {
-            stdOut = br.lines().peek(x -> logger.info(x)).filter(x -> x.contains(contains)).collect(Collectors.joining("\n"));
+            stdOut = br.lines().peek(x -> logger.finest(x)).filter(x -> x.contains(contains)).collect(Collectors.joining("\n"));
         }
         return stdOut;
     }
