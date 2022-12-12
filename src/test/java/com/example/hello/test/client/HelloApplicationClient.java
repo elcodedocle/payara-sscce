@@ -1,4 +1,4 @@
-package com.example.hello.client;
+package com.example.hello.test.client;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

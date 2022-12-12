@@ -1,6 +1,6 @@
 package com.example.hello.test;
 
-import com.example.hello.client.HelloApplicationClient;
+import com.example.hello.test.client.HelloApplicationClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
