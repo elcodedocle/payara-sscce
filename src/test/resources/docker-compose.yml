@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+  payara-deployment-test:
+    build:
+      context: dockerfiles
+      dockerfile: payara.Dockerfile
+    ports:
+      - "${payara.port}:8080"
