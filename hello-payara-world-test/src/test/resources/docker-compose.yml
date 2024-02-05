@@ -1,0 +1,19 @@
+version: '3.3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=db
+      - POSTGRES_USER=db
+      - POSTGRES_DB=db
+    ports:
+      - "${db.port}:5432"
+
+  payara-deployment-test:
+    build:
+      context: dockerfiles
+      dockerfile: payara.Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "${payara.port}:8080"

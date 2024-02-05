@@ -4,182 +4,89 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <groupId>com.example.payara</groupId>
     <artifactId>hello-payara-world</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>hello</name>
-    <packaging>war</packaging>
+    <modules>
+        <module>hello-payara-world-jpa</module>
+        <module>hello-payara-world-ejb</module>
+        <module>hello-payara-world-war</module>
+        <module>hello-payara-world-ear</module>
+        <module>hello-payara-world-test</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <junit-jupiter.version>5.5.0</junit-jupiter.version>
-        <payara.version>5.2022.4</payara.version>
-        <skip.test.deployment>false</skip.test.deployment>
+        <payara.version>6.2024.1</payara.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-web-api</artifactId>
-            <version>9.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>fish.payara.extras</groupId>
-            <artifactId>payara-embedded-all</artifactId>
-            <version>${payara.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit-jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.28</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-web-api</artifactId>
+                <version>10.0.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-api</artifactId>
+                <version>10.0.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>3.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.ejb</groupId>
+                <artifactId>jakarta.ejb-api</artifactId>
+                <version>4.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>2.1.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>fish.payara.extras</groupId>
+                <artifactId>payara-embedded-all</artifactId>
+                <version>${payara.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <finalName>hello</finalName>
         <testResources>
             <testResource>
                 <filtering>true</filtering>
-                <directory>src/test/resources</directory>
+                <directory>${project.basedir}/src/test/resources</directory>
             </testResource>
         </testResources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>reserve-network-port</id>
-                        <goals>
-                            <goal>reserve-network-port</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <portNames>
-                                <portName>payara.port</portName>
-                            </portNames>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.test.deployment}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>pre_deploy_test_environment</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.test.deployment}</skip>
-                            <outputDirectory>${basedir}/target/test-classes/dockerfiles</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/target</directory>
-                                    <includes>
-                                        <include>hello.war</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <id>pre_deploy_clean_test_environment</id>
-                        <configuration>
-                            <skip>${skip.test.deployment}</skip>
-                            <executable>docker-compose</executable>
-                            <arguments>
-                                <argument>-f</argument>
-                                <argument>target/test-classes/docker-compose.yml</argument>
-                                <argument>down</argument>
-                                <argument>-v</argument>
-                                <argument>--rmi</argument>
-                                <argument>local</argument>
-                            </arguments>
-                            <successCodes>
-                                <successCode>0</successCode>
-                                <successCode>1</successCode>
-                            </successCodes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <id>deploy_test_environment</id>
-                        <configuration>
-                            <skip>${skip.test.deployment}</skip>
-                            <executable>docker-compose</executable>
-                            <arguments>
-                                <argument>-f</argument>
-                                <argument>target/test-classes/docker-compose.yml</argument>
-                                <argument>up</argument>
-                                <argument>-d</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>post-integration-test</phase>
-                        <id>post_undeploy_test_environment</id>
-                        <configuration>
-                            <skip>${skip.test.deplyment}</skip>
-                            <executable>docker-compose</executable>
-                            <arguments>
-                                <argument>-f</argument>
-                                <argument>target/test-classes/docker-compose.yml</argument>
-                                <argument>down</argument>
-                                <argument>-v</argument>
-                                <argument>--rmi</argument>
-                                <argument>local</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>
