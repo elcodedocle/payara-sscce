@@ -104,13 +104,22 @@
                         </goals>
                         <configuration>
                             <artifactItems>
-                            <artifactItem>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                                <version>42.7.0</version>
-                                <overWrite>false</overWrite>
-                                <outputDirectory>${project.basedir}/target/test-classes/dockerfiles</outputDirectory>
-                            </artifactItem>
+                                <artifactItem>
+                                    <groupId>fish.payara.distributions</groupId>
+                                    <artifactId>payara</artifactId>
+                                    <version>${payara.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/target/test-classes/dockerfiles</outputDirectory>
+                                    <destFileName>payara.zip</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.postgresql</groupId>
+                                    <artifactId>postgresql</artifactId>
+                                    <version>42.7.0</version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.basedir}/target/test-classes/dockerfiles</outputDirectory>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
