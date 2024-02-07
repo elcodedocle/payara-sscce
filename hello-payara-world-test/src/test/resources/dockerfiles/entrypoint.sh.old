@@ -1,0 +1,15 @@
+#!/bin/bash
+# THIS IS THE ENTRYPOINT USED TO GENERATE domain.xml
+DB_CONF="user=db:password=db:databaseName=db:serverName=db:portNumber=5432"
+if [ -f /tmp/firstrun ]; then
+    # Setup everything on first run only
+    echo "create-jvm-options -- --add-opens=\"java.base/java.io=ALL-UNNAMED\"" >> "first_run_pre_boot_commands"
+    echo "set-microprofile-healthcheck-configuration --enabled=true" >> "first_run_post_boot_commands"
+    echo "create-jdbc-connection-pool --datasourceclassname org.postgresql.xa.PGXADataSource --restype javax.sql.XADataSource --property \"${DB_CONF}\" helloDbConnectionPool"  >> "first_run_post_boot_commands"
+    echo "create-jdbc-resource --connectionpoolid helloDbConnectionPool jdbc/helloConnector"  >> "first_run_post_boot_commands"
+    asadmin start-domain -v --postbootcommandfile=first_run_post_boot_commands --prebootcommandfile=first_run_pre_boot_commands
+    rm /tmp/firstrun
+else
+    # Start payara
+    asadmin start-domain -v
+fi
