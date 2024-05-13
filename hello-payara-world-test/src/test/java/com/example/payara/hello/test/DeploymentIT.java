@@ -1,6 +1,7 @@
 package com.example.payara.hello.test;
 
 import com.example.payara.hello.test.client.HelloApplicationClient;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DeploymentIT {
@@ -22,6 +24,8 @@ class DeploymentIT {
     Properties properties = loadProperties();
     String payaraHost = (String) properties.get("payara.host");
     int payaraPort = Integer.parseInt((String) properties.get("payara.port"));
+    int teardownDelay = Integer.parseInt((String) properties.get("payara.teardownDelay"));
+    static int staticTeardownDelay;
 
     private HelloApplicationClient client;
 
@@ -29,6 +33,15 @@ class DeploymentIT {
     public void before() {
 
         client = new HelloApplicationClient("http://"+payaraHost+":"+payaraPort);
+        staticTeardownDelay = teardownDelay;
+
+    }
+
+    @AfterAll
+    public static void afterAll() throws InterruptedException {
+
+        // wait before teardown
+        sleep(staticTeardownDelay);
 
     }
 
