@@ -7,6 +7,9 @@ import jakarta.ejb.ConcurrencyManagementType;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.inject.Inject;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import java.security.Provider;
 
 @Singleton
 @Startup
@@ -17,6 +20,7 @@ public class HelloService {
     HelloStorage helloStorage;
 
     String id;
+    Provider provider = new BouncyCastleProvider();
 
     @PostConstruct
     public void init() {
