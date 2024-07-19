@@ -36,7 +36,7 @@ public class HelloApplicationClient {
         }
     }
 
-   public String helloWorld() {
+    public String helloWorld() {
         Response response = client.target(apiUrl + "/hello-world").request().get();
 
         check(response);
@@ -71,5 +71,13 @@ public class HelloApplicationClient {
             }
         }
         throw new RuntimeException("Payara did not become healthy for base url: " + baseUrl);
+    }
+
+    public int helloThrowWrappedStatus() {
+        return client.target(apiUrl + "/hello-world/hello-throw-ejb-wrapped-validation-exception").request().get().getStatus();
+    }
+
+    public int helloThrowNotWrappedStatus() {
+        return client.target(apiUrl + "/hello-world/hello-throw-not-ejb-wrapped-validation-exception").request().get().getStatus();
     }
 }

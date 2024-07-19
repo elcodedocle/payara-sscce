@@ -7,6 +7,7 @@ import jakarta.ejb.ConcurrencyManagementType;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 
 @Singleton
 @Startup
@@ -27,6 +28,11 @@ public class HelloService {
 
     public String hello() {
         return helloStorage.read(id).getMessage();
+    }
+
+    public String helloThrowEJBWrappedValidationException() throws ValidationException {
+        throw new ValidationException("This should become a 400 after the CustomValidationExceptionMapper maps " +
+                "this exception that the EJBExceptionMapper rethrows after unwrapping the EJBException containing it");
     }
 
 }
