@@ -1,6 +1,7 @@
 package com.example.payara.hello;
 
 import jakarta.ejb.EJBException;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -16,6 +17,9 @@ public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
     @Context
     private Providers providers;
 
+    @Context
+    private ValidationExceptionMapper validationExceptionMapper;
+
     @Override
     public Response toResponse(final EJBException exception) {
 
@@ -29,6 +33,9 @@ public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
             handledException = e;
         }
 
+        if (handledException instanceof ValidationException) {
+            return validationExceptionMapper.toResponse((ValidationException) handledException);
+        }
         ExceptionMapper<Throwable> mapper = providers.getExceptionMapper((Class<Throwable>) handledException.getClass());
         return mapper.toResponse(handledException);
     }
