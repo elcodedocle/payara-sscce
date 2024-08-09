@@ -32,7 +32,7 @@ public class HelloService {
 
     public String helloThrowEJBWrappedValidationException() throws ValidationException {
         throw new ValidationException("This should become a 400 after the CustomValidationExceptionMapper maps " +
-                "this exception that the EJBExceptionMapper rethrows after unwrapping the EJBException containing it");
+                "this exception that the EJBExceptionMapper handles after unwrapping the EJBException containing it");
     }
 
 }
