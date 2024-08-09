@@ -74,7 +74,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>reserve-network-port-db</id>
+                        <id>reserve-network-port-debug</id>
                         <goals>
                             <goal>reserve-network-port</goal>
                         </goals>
