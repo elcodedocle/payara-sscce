@@ -31,8 +31,8 @@ public class HelloService {
     }
 
     public String helloThrowEJBWrappedValidationException() throws ValidationException {
-        throw new ValidationException("This should become a 400 after the CustomValidationExceptionMapper maps " +
-                "this exception that the EJBExceptionMapper handles after unwrapping the EJBException containing it");
+        throw new ValidationException("This exception should become a 400 after the ValidationExceptionMapper handles " +
+                "it when called by the EJBExceptionMapper after unwrapping it");
     }
 
 }
