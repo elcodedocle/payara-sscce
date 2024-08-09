@@ -16,3 +16,4 @@ services:
       - db
     ports:
       - "${payara.port}:8080"
+      - "${debug.port}:9009"
