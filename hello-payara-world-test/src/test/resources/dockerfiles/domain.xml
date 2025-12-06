@@ -22,7 +22,6 @@
         </authorization-service>
     </security-configurations>
     <managed-job-config></managed-job-config>
-    <monitoring-console-configuration></monitoring-console-configuration>
     <system-applications></system-applications>
     <resources>
         <jdbc-resource pool-name="__TimerPool" object-type="system-all" jndi-name="jdbc/__TimerPool"></jdbc-resource>
@@ -119,7 +118,6 @@
             <ejb-invoker-configuration></ejb-invoker-configuration>
             <amx-configuration></amx-configuration>
             <microprofile-fault-tolerance-configuration></microprofile-fault-tolerance-configuration>
-            <rest-monitoring-configuration></rest-monitoring-configuration>
             <jms-service default-jms-host="default_JMS_host" type="EMBEDDED">
                 <jms-host port="${JMS_PROVIDER_PORT}" host="localhost" name="default_JMS_host"></jms-host>
             </jms-service>

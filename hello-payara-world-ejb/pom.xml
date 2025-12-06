@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>hello-payara-world-ejb</artifactId>
-    <packaging>ejb</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,14 +19,13 @@
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.example.payara</groupId>
             <artifactId>hello-payara-world-jpa</artifactId>
             <version>${project.version}</version>
-            <type>ejb</type>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

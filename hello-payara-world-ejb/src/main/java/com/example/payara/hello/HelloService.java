@@ -17,16 +17,32 @@ public class HelloService {
     HelloStorage helloStorage;
 
     String id;
+    String userId;
+    String adminId;
 
     @PostConstruct
     public void init() {
+        id = getHello("Hello, World!");
+        userId = getHello("Hello, User!");
+        adminId = getHello("Hello, Admin!");
+    }
+
+    private String getHello(String message) {
         var hello = new Hello();
-        hello.setMessage("Hello, World!");
-        id = helloStorage.merge(hello).getId();
+        hello.setMessage(message);
+        return helloStorage.merge(hello).getId();
     }
 
     public String hello() {
         return helloStorage.read(id).getMessage();
+    }
+
+    public String helloUser() {
+        return helloStorage.read(userId).getMessage();
+    }
+
+    public String helloAdmin() {
+        return helloStorage.read(adminId).getMessage();
     }
 
 }

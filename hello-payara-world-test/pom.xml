@@ -12,10 +12,7 @@
     <artifactId>hello-payara-world-test</artifactId>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skip.test.deployment>false</skip.test.deployment>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -159,6 +156,12 @@
                                     <directory>${basedir}/../hello-payara-world-ear/target</directory>
                                     <includes>
                                         <include>hello.ear</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>${basedir}/../hello-payara-world-sam/target</directory>
+                                    <includes>
+                                        <include>hello.jar</include>
                                     </includes>
                                 </resource>
                             </resources>

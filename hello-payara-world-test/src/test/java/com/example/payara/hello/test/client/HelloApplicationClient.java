@@ -5,6 +5,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import java.util.logging.Logger;
 
+import static java.lang.Thread.sleep;
+
 public class HelloApplicationClient {
     // this should match the build/finalName in the pom.xml
     private static final String ROOT_CONTEXT = "hello";
@@ -36,8 +38,24 @@ public class HelloApplicationClient {
         }
     }
 
-   public String helloWorld() {
+    public String helloWorld() {
         Response response = client.target(apiUrl + "/hello-world").request().get();
+
+        check(response);
+
+        return response.readEntity(String.class);
+    }
+
+    public String helloUserWorld() {
+        Response response = client.target(apiUrl + "/hello-world/user").request().get();
+
+        check(response);
+
+        return response.readEntity(String.class);
+    }
+
+    public String helloAdminWorld() {
+        Response response = client.target(apiUrl + "/hello-world/admin").request().get();
 
         check(response);
 
@@ -59,12 +77,18 @@ public class HelloApplicationClient {
     /** Wait until the payara service is healthy. Max 60 retries are done. */
     public void waitForServiceToBeHealthy() {
         int maxRetries = 60;
+        boolean wasHealthy = true;
         for (int i = 1; i <= maxRetries; i++) {
-            if (isHealthy()) {
-                return;
-            }
             try {
-                Thread.sleep(1000);
+                if (isHealthy()) {
+                    if (!wasHealthy) {
+                        // (Add some extra wait to ensure the authentication provider is also ready)
+                        sleep(5000);
+                    }
+                    return;
+                }
+                wasHealthy = false;
+                sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new RuntimeException("Error in Thread.sleep");

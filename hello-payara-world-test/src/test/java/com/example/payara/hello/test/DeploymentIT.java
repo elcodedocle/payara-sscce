@@ -2,7 +2,8 @@ package com.example.payara.hello.test;
 
 import com.example.payara.hello.test.client.HelloApplicationClient;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class DeploymentIT {
 
@@ -32,11 +34,36 @@ class DeploymentIT {
 
     }
 
-    @Test
-    void testHello(){
+    @ParameterizedTest
+    @CsvSource(value={
+            "helloWorld;Hello, World!;","helloUserWorld;Hello, User!;UNPRIVILEGED_USER","helloAdminWorld;Hello, Admin!;ADMINISTRATOR"
+    }, delimiter = ';')
+    void testHello(String method, String message, String role){
+        logger.info("Testing " + method + " returns message: " + message);
+        // Query the health endpoint to ensure that the application is deployed
         client.waitForServiceToBeHealthy();
-        assertEquals("Hello, World!", client.helloWorld());
-        assertEquals("", parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "SEVERE"));
+        try {
+            // Test that the endpoint produces the expected HTTP response
+            assertEquals(message, client.getClass().getDeclaredMethod(method).invoke(client));
+        } catch (Exception e) {
+            logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
+            fail("Client Exception: ", e);
+        }
+        var errorOutput = parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "SEVERE");
+        if (!errorOutput.isEmpty()) {
+            // Test that no SEVERE exception is present in Payara server logs
+            logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
+            fail("SEVERE exception found in server logs");
+        } else if (role != null && !role.isEmpty()){
+            // Test that role check is present in Payara server logs
+            var roleMsg = "Checking if servlet com.example.payara.hello.HelloApplication with principal PASS_ALL_USER has role "
+                            + role + " isGranted: true";
+            var roleCheckOutput = parseCommandOutput("docker logs test-classes-payara-deployment-test-1", roleMsg);
+            if (roleCheckOutput.isEmpty()) {
+                logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
+                fail("Role " + role + " check not found in server logs");
+            }
+        }
         logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "successfully deployed in"));
     }
 
