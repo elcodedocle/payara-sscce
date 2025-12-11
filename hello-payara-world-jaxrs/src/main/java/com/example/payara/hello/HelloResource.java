@@ -1,40 +1,30 @@
 package com.example.payara.hello;
 
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 
-@Path("/hello-world")
+@Path("/hello")
+@ApplicationScoped
 public class HelloResource {
 
-    HelloService helloService;
+    MessageResource messageResource;
+
+    public HelloResource() {
+        // NOOP (EJB proxyable shenanigans)
+    }
 
     @Inject
-    public HelloResource(HelloService helloService) {
-        this.helloService = helloService;
+    public HelloResource(MessageResource messageResource) {
+        this.messageResource = messageResource;
     }
 
-    @GET
-    @Produces("text/plain")
-    public String helloUnprotected() {
-        return helloService.hello();
+    /**
+     * @return The account resource.
+     */
+    @Path("message")
+    public MessageResource getMessageResource() {
+        return messageResource;
     }
 
-    @GET
-    @Produces("text/plain")
-    @RolesAllowed("UNPRIVILEGED_USER")
-    @Path("user")
-    public String helloRestrictedToUnprivilegedUser() {
-        return helloService.helloUser();
-    }
-
-    @GET
-    @Produces("text/plain")
-    @RolesAllowed("ADMINISTRATOR")
-    @Path("admin")
-    public String helloRestrictedToAdministrator() {
-        return helloService.helloAdmin();
-    }
 }

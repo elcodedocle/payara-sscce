@@ -65,7 +65,7 @@ public class PassAllSAM implements ServerAuthModule {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) throws AuthException {
         logger.log(Level.INFO, () -> "Validating request");
         String username = "PASS_ALL_USER";
-        String[] roles = new String[] { "ADMINISTRATOR", "UNPRIVILEGED_USER" };
+        String[] roles = new String[] { "UNPRIVILEGED_USER" };
         if (this.handler == null) {
             throw new AuthException("No CallbackHandler found");
         }

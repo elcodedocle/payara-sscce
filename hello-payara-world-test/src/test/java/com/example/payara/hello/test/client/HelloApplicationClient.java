@@ -39,7 +39,7 @@ public class HelloApplicationClient {
     }
 
     public String helloWorld() {
-        Response response = client.target(apiUrl + "/hello-world").request().get();
+        Response response = client.target(apiUrl + "/hello/message").request().get();
 
         check(response);
 
@@ -47,19 +47,16 @@ public class HelloApplicationClient {
     }
 
     public String helloUserWorld() {
-        Response response = client.target(apiUrl + "/hello-world/user").request().get();
+        Response response = client.target(apiUrl + "/hello/message/user").request().get();
 
         check(response);
 
         return response.readEntity(String.class);
     }
 
-    public String helloAdminWorld() {
-        Response response = client.target(apiUrl + "/hello-world/admin").request().get();
-
-        check(response);
-
-        return response.readEntity(String.class);
+    public int helloAdminWorldCode() {
+        Response response = client.target(apiUrl + "/hello/message/admin").request().get();
+        return response.getStatus();
     }
 
     private boolean isHealthy() {

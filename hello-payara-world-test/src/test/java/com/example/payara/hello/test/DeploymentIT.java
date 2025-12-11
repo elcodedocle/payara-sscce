@@ -1,7 +1,7 @@
 package com.example.payara.hello.test;
 
 import com.example.payara.hello.test.client.HelloApplicationClient;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -20,28 +20,31 @@ class DeploymentIT {
 
     private static final String CONFIG_FILE_NAME = "config.properties";
 
-    Logger logger = Logger.getLogger(this.getClass().getName());
-    Properties properties = loadProperties();
-    String payaraHost = (String) properties.get("payara.host");
-    int payaraPort = Integer.parseInt((String) properties.get("payara.port"));
+    static Logger logger = Logger.getLogger(DeploymentIT.class.getName());
+    static Properties properties = loadProperties();
+    static String payaraHost = (String) properties.get("payara.host");
+    static int payaraPort = Integer.parseInt((String) properties.get("payara.port"));
 
-    private HelloApplicationClient client;
+    static HelloApplicationClient client = new HelloApplicationClient("http://"+payaraHost+":"+payaraPort);
 
-    @BeforeEach
-    public void before() {
-
-        client = new HelloApplicationClient("http://"+payaraHost+":"+payaraPort);
-
+    @BeforeAll
+    static void setUp() {
+        try {
+            logger.info("Waiting for the service to be healthy...");
+            // Query the health endpoint to ensure that the application is deployed
+            client.waitForServiceToBeHealthy();
+            logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "successfully deployed in"));
+        } catch (Exception e) {
+            fail("The service did not become healthy");
+        }
     }
 
     @ParameterizedTest
     @CsvSource(value={
-            "helloWorld;Hello, World!;","helloUserWorld;Hello, User!;UNPRIVILEGED_USER","helloAdminWorld;Hello, Admin!;ADMINISTRATOR"
+            "helloWorld;Hello, World!;","helloUserWorld;Hello, User!;UNPRIVILEGED_USER"
     }, delimiter = ';')
     void testHello(String method, String message, String role){
         logger.info("Testing " + method + " returns message: " + message);
-        // Query the health endpoint to ensure that the application is deployed
-        client.waitForServiceToBeHealthy();
         try {
             // Test that the endpoint produces the expected HTTP response
             assertEquals(message, client.getClass().getDeclaredMethod(method).invoke(client));
@@ -64,13 +67,23 @@ class DeploymentIT {
                 fail("Role " + role + " check not found in server logs");
             }
         }
-        logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "successfully deployed in"));
     }
 
-    private Properties loadProperties() {
+    void testHello403Forbidden(){
+        logger.info("Testing helloAdminWorld returns 403 error");
+        try {
+            // Test that the endpoint produces the expected HTTP response
+            assertEquals(403, client.helloAdminWorldCode());
+        } catch (Exception e) {
+            logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
+            fail("Client Exception: ", e);
+        }
+    }
+
+    static Properties loadProperties() {
         var properties = new Properties();
         try (InputStream inputStream =
-                     this.getClass().getClassLoader().getResourceAsStream(CONFIG_FILE_NAME)) {
+                     DeploymentIT.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME)) {
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
@@ -83,7 +96,7 @@ class DeploymentIT {
         return properties;
     }
 
-    private String parseCommandOutput(final String command, final String contains) {
+    static String parseCommandOutput(final String command, final String contains) {
         try {
             var process = Runtime.getRuntime().exec(command);
             logger.finest("Parsing stdout for " + contains + " log traces...");
@@ -97,7 +110,7 @@ class DeploymentIT {
         }
     }
 
-    private String parseInputStream(InputStream inputStream, final String contains) throws IOException {
+    static String parseInputStream(InputStream inputStream, final String contains) throws IOException {
         var stdOut = "";
         try (var br = new BufferedReader(new InputStreamReader(inputStream))) {
             stdOut = br.lines().peek(x -> logger.finest(x)).filter(x -> x.contains(contains)).collect(Collectors.joining("\n"));
