@@ -8,6 +8,9 @@
     <ejb>com.example.payara-hello-payara-world-ejb-1.0-SNAPSHOT.jar</ejb>
   </module>
   <module>
+    <ejb>com.example.payara-hello-payara-world-jaxrs-subresource-1.0-SNAPSHOT.jar</ejb>
+  </module>
+  <module>
     <ejb>com.example.payara-hello-payara-world-jaxrs-1.0-SNAPSHOT.jar</ejb>
   </module>
   <module>

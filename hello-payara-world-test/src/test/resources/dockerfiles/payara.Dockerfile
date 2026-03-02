@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:trixie
 
 # Ports being exposed
 EXPOSE 8080
@@ -8,14 +8,14 @@ USER root
 
 RUN apt update && \
     apt -y upgrade && \
-    apt -y install wget unzip less openjdk-17-jre-headless
+    apt -y install wget unzip less openjdk-21-jre-headless
 
 ENV PAYARA_VERSION=${payara.version}
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
 # Set environment variables for payara
-ENV PAYARA_HOME=/opt/payara6
+ENV PAYARA_HOME=/opt/payara7
 
 COPY payara.zip .
 RUN unzip -o payara.zip -d /opt && \

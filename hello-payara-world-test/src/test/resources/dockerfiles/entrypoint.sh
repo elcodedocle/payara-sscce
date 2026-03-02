@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -f /tmp/firstrun ]; then
     echo "set-log-levels javax.enterprise.system.container.web.com.sun.web.security=FINEST" >> "first_run_post_boot_commands"
-    echo "deploy /opt/payara6/hello.ear" >> "first_run_post_boot_commands"
+    echo "deploy /opt/payara7/hello.ear" >> "first_run_post_boot_commands"
     echo "create-message-security-provider --layer HttpServlet --classname com.example.payara.hello.PassAllSAM --providertype server --requestauthsource sender PassAllSAM" >> "first_run_post_boot_commands"
     asadmin start-domain -v --postbootcommandfile=first_run_post_boot_commands
     rm /tmp/firstrun

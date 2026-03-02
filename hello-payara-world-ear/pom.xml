@@ -31,6 +31,12 @@
         </dependency>
         <dependency>
             <groupId>com.example.payara</groupId>
+            <artifactId>hello-payara-world-jaxrs-subresource</artifactId>
+            <type>ejb</type>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.example.payara</groupId>
             <artifactId>hello-payara-world-jaxrs</artifactId>
             <type>ejb</type>
             <version>${project.version}</version>
@@ -61,6 +67,10 @@
                         <ejbModule>
                             <groupId>com.example.payara</groupId>
                             <artifactId>hello-payara-world-ejb</artifactId>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>com.example.payara</groupId>
+                            <artifactId>hello-payara-world-jaxrs-subresource</artifactId>
                         </ejbModule>
                         <ejbModule>
                             <groupId>com.example.payara</groupId>

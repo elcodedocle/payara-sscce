@@ -59,7 +59,7 @@ class DeploymentIT {
             fail("SEVERE exception found in server logs");
         } else if (role != null && !role.isEmpty()){
             // Test that role check is present in Payara server logs
-            var roleMsg = "Checking if servlet com.example.payara.hello.HelloApplication with principal PASS_ALL_USER has role "
+            var roleMsg = "Checking if servlet com.example.payara.hello.HelloApplication with principal UserNameAndPassword[PASS_ALL_USER] has role "
                             + role + " isGranted: true";
             var roleCheckOutput = parseCommandOutput("docker logs test-classes-payara-deployment-test-1", roleMsg);
             if (roleCheckOutput.isEmpty()) {
