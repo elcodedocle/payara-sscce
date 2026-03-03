@@ -31,19 +31,13 @@
         </dependency>
         <dependency>
             <groupId>com.example.payara</groupId>
-            <artifactId>hello-payara-world-jaxrs-subresource</artifactId>
-            <type>ejb</type>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example.payara</groupId>
-            <artifactId>hello-payara-world-jaxrs</artifactId>
-            <type>ejb</type>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example.payara</groupId>
             <artifactId>hello-payara-world-war</artifactId>
+            <type>war</type>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.example.payara</groupId>
+            <artifactId>hello-payara-world2-war</artifactId>
             <type>war</type>
             <version>${project.version}</version>
         </dependency>
@@ -68,20 +62,19 @@
                             <groupId>com.example.payara</groupId>
                             <artifactId>hello-payara-world-ejb</artifactId>
                         </ejbModule>
-                        <ejbModule>
-                            <groupId>com.example.payara</groupId>
-                            <artifactId>hello-payara-world-jaxrs-subresource</artifactId>
-                        </ejbModule>
-                        <ejbModule>
-                            <groupId>com.example.payara</groupId>
-                            <artifactId>hello-payara-world-jaxrs</artifactId>
-                        </ejbModule>
                         <webModule>
                             <groupId>com.example.payara</groupId>
                             <artifactId>hello-payara-world-war</artifactId>
                             <uri>hello.war</uri>
                             <bundleFileName>hello.war</bundleFileName>
                             <contextRoot>/hello</contextRoot>
+                        </webModule>
+                        <webModule>
+                            <groupId>com.example.payara</groupId>
+                            <artifactId>hello-payara-world2-war</artifactId>
+                            <uri>hello2.war</uri>
+                            <bundleFileName>hello2.war</bundleFileName>
+                            <contextRoot>/hello2</contextRoot>
                         </webModule>
                     </modules>
                 </configuration>

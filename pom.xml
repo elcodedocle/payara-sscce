@@ -15,6 +15,9 @@
         <module>hello-payara-world-jaxrs-subresource</module>
         <module>hello-payara-world-jaxrs</module>
         <module>hello-payara-world-war</module>
+        <module>hello-payara-world2-jaxrs-subresource</module>
+        <module>hello-payara-world2-jaxrs</module>
+        <module>hello-payara-world2-war</module>
         <module>hello-payara-world-ear</module>
         <module>hello-payara-world-test</module>
     </modules>

@@ -22,8 +22,7 @@ RUN unzip -o payara.zip -d /opt && \
     rm -f payara.zip
 
 # Setup payara
-RUN mkdir $PAYARA_HOME/.iddocserver &&\
-    useradd -d $PAYARA_HOME payara && \
+RUN useradd -d $PAYARA_HOME payara && \
     chown -R payara:payara /opt
 
 ENV PATH=$PATH:$PAYARA_HOME/bin

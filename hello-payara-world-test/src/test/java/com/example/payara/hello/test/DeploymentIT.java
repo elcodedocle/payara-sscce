@@ -41,22 +41,24 @@ class DeploymentIT {
 
     @ParameterizedTest
     @CsvSource(value={
-            "helloWorld;Hello, World!;","helloUserWorld;Hello, User!;UNPRIVILEGED_USER"
+            "helloWorld;Hello, World!;","helloUserWorld;Hello, User!;UNPRIVILEGED_USER",
+            "helloWorld2;Hello2, World!;","helloUserWorld2;Hello2, User!;UNPRIVILEGED_USER"
     }, delimiter = ';')
     void testHello(String method, String message, String role){
-        logger.info("Testing " + method + " returns message: " + message);
+        var msg = "Testing " + method + " returns message: " + message;
+        logger.info(msg);
         try {
             // Test that the endpoint produces the expected HTTP response
             assertEquals(message, client.getClass().getDeclaredMethod(method).invoke(client));
         } catch (Exception e) {
             logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
-            fail("Client Exception: ", e);
+            fail(msg + " - Client Exception: ", e);
         }
         var errorOutput = parseCommandOutput("docker logs test-classes-payara-deployment-test-1", "SEVERE");
         if (!errorOutput.isEmpty()) {
             // Test that no SEVERE exception is present in Payara server logs
             logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
-            fail("SEVERE exception found in server logs");
+            fail(msg + " - SEVERE exception found in server logs");
         } else if (role != null && !role.isEmpty()){
             // Test that role check is present in Payara server logs
             var roleMsg = "Checking if servlet com.example.payara.hello.HelloApplication with principal UserNameAndPassword[PASS_ALL_USER] has role "
@@ -64,7 +66,7 @@ class DeploymentIT {
             var roleCheckOutput = parseCommandOutput("docker logs test-classes-payara-deployment-test-1", roleMsg);
             if (roleCheckOutput.isEmpty()) {
                 logger.info(parseCommandOutput("docker logs test-classes-payara-deployment-test-1", ""));
-                fail("Role " + role + " check not found in server logs");
+                fail(msg + " - Role " + role + " check not found in server logs");
             }
         }
     }

@@ -11,9 +11,13 @@ public class HelloApplicationClient {
     // this should match the build/finalName in the pom.xml
     private static final String ROOT_CONTEXT = "hello";
 
+    private static final String ROOT_CONTEXT_2 = "hello2";
+
     private final String baseUrl;
 
     private final String apiUrl;
+
+    private final String api2Url;
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -27,6 +31,7 @@ public class HelloApplicationClient {
     public HelloApplicationClient(String baseUrl) {
         this.baseUrl = baseUrl;
         this.apiUrl = baseUrl + "/" + ROOT_CONTEXT + "/api";
+        this.api2Url = baseUrl + "/" + ROOT_CONTEXT_2 + "/api";
         client = ClientBuilder.newClient();
     }
 
@@ -48,6 +53,22 @@ public class HelloApplicationClient {
 
     public String helloUserWorld() {
         Response response = client.target(apiUrl + "/hello/message/user").request().get();
+
+        check(response);
+
+        return response.readEntity(String.class);
+    }
+
+    public String helloWorld2() {
+        Response response = client.target(api2Url + "/hello2/message").request().get();
+
+        check(response);
+
+        return response.readEntity(String.class);
+    }
+
+    public String helloUserWorld2() {
+        Response response = client.target(api2Url + "/hello2/message/user").request().get();
 
         check(response);
 

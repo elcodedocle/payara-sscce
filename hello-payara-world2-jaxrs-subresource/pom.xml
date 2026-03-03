@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>hello-payara-world-jaxrs</artifactId>
+    <artifactId>hello-payara-world2-jaxrs-subresource</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -17,11 +17,6 @@
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-web-api</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.example.payara</groupId>
-            <artifactId>hello-payara-world-jaxrs-subresource</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

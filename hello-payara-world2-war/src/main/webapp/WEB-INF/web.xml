@@ -2,16 +2,16 @@
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
-    <display-name>HELLO API V1</display-name>
+    <display-name>HELLO2 API V1</display-name>
 
     <deny-uncovered-http-methods />
 
     <security-constraint>
-        <display-name>HELLO API</display-name>
+        <display-name>HELLO2 API</display-name>
         <web-resource-collection>
-            <web-resource-name>HELLO API</web-resource-name>
-            <description>HELLO Interface</description>
-            <url-pattern>/hello/*</url-pattern>
+            <web-resource-name>HELLO2API</web-resource-name>
+            <description>HELLO2 API Interface</description>
+            <url-pattern>/hello2/*</url-pattern>
             <http-method>GET</http-method>
         </web-resource-collection>
         <auth-constraint>

@@ -21,9 +21,7 @@
         <dependency>
             <groupId>com.example.payara</groupId>
             <artifactId>hello-payara-world-jaxrs</artifactId>
-            <type>jar</type>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
